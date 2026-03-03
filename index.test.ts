@@ -21,12 +21,22 @@ describe('slug', () => {
   })
 
   it('removes special characters', () => {
-    expect(slug('Café & Bar')).toBe('caf-bar') // é removed by removeSpecialChars
     expect(slug('Hello! World?')).toBe('hello-world')
+  })
+
+  it('normalizes accented latin letters to ascii', () => {
+    expect(slug('Café & Bar')).toBe('cafe-bar')
+    expect(slug('naïve façade')).toBe('naive-facade')
+    expect(slug('Über groß')).toBe('uber-gross')
+    expect(slug('Æther & encyclopædia')).toBe('aether-encyclopaedia')
   })
 
   it('respects lowercase: false', () => {
     expect(slug('Hello World', { lowercase: false })).toBe('Hello-World')
+  })
+
+  it('respects locale when lowercasing', () => {
+    expect(slug('I', { locale: 'tr' })).toBe('i')
   })
 
   it('respects maxLength', () => {

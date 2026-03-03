@@ -1,6 +1,5 @@
 /**
  * Generate URL-friendly slug from text.
- * Zero dependencies.
  */
 
 export type SlugSeparator = '-' | '_' | ''
@@ -27,6 +26,24 @@ const defaultOptions: Required<Omit<SlugOptions, 'maxLength' | 'locale'>> & {
   removeSpecialChars: true,
 }
 
+function normalizeToAscii(input: string): string {
+  if (!input) return ''
+
+  let result = input.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+
+  result = result
+    .replace(/ß/g, 'ss')
+    .replace(/ẞ/g, 'SS')
+    .replace(/æ/g, 'ae')
+    .replace(/Æ/g, 'AE')
+    .replace(/œ/g, 'oe')
+    .replace(/Œ/g, 'OE')
+    .replace(/ı/g, 'i')
+    .replace(/İ/g, 'I')
+
+  return result
+}
+
 /**
  * Converts text to a URL-friendly slug.
  * @param text - Input text (e.g. "Hello World!")
@@ -39,11 +56,15 @@ export function slug(text: string, options: SlugOptions = {}): string {
   const opts = { ...defaultOptions, ...options }
   let result = text.trim()
 
+   if (!result) return ''
+
   if (opts.lowercase) {
     result = opts.locale !== undefined && opts.locale !== false
       ? result.toLocaleLowerCase(opts.locale)
       : result.toLowerCase()
   }
+
+  result = normalizeToAscii(result)
 
   if (opts.removeSpecialChars) {
     result = result.replace(/[^\w\s-]/g, '')

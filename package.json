@@ -1,6 +1,6 @@
 {
   "name": "slug-from-text",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Generate URL-friendly slugs from text. Zero dependencies.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -12,6 +12,7 @@
       "require": "./dist/index.js"
     }
   },
+  "sideEffects": false,
   "files": [
     "dist",
     "README.md"
