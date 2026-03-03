@@ -1,6 +1,6 @@
 {
   "name": "slug-from-text",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Generate URL-friendly slugs from text. Zero dependencies.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
