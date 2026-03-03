@@ -1,6 +1,6 @@
 # slug-from-text
 
-Generate URL-friendly slugs from text. Zero dependencies.
+Generate URL-friendly slugs from text.
 
 ## Install
 

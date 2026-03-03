@@ -22,7 +22,7 @@
     "prepublishOnly": "npm run build"
   },
   "keywords": ["slug", "url", "seo", "string"],
-  "author": "",
+  "author": "MaxGrushevsky",
   "license": "MIT",
   "repository": {
     "type": "git",
