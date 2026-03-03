@@ -12,9 +12,16 @@ export interface SlugOptions {
   lowercase?: boolean
   /** Remove special characters. Default: true */
   removeSpecialChars?: boolean
+  /** Max length of the result (trims from end). Default: no limit */
+  maxLength?: number
+  /** Locale for lowercase (e.g. 'tr' for Turkish). Uses toLocaleLowerCase when set. */
+  locale?: string | false
 }
 
-const defaultOptions: Required<SlugOptions> = {
+const defaultOptions: Required<Omit<SlugOptions, 'maxLength' | 'locale'>> & {
+  maxLength?: number
+  locale?: string | false
+} = {
   separator: '-',
   lowercase: true,
   removeSpecialChars: true,
@@ -33,7 +40,9 @@ export function slug(text: string, options: SlugOptions = {}): string {
   let result = text.trim()
 
   if (opts.lowercase) {
-    result = result.toLowerCase()
+    result = opts.locale !== undefined && opts.locale !== false
+      ? result.toLocaleLowerCase(opts.locale)
+      : result.toLowerCase()
   }
 
   if (opts.removeSpecialChars) {
@@ -50,6 +59,13 @@ export function slug(text: string, options: SlugOptions = {}): string {
 
   if (opts.separator) {
     result = result.replace(new RegExp(`^${opts.separator}+|${opts.separator}+$`, 'g'), '')
+  }
+
+  if (opts.maxLength != null && opts.maxLength > 0 && result.length > opts.maxLength) {
+    result = result.slice(0, opts.maxLength)
+    if (opts.separator) {
+      result = result.replace(new RegExp(`${opts.separator}+$`, 'g'), '')
+    }
   }
 
   return result

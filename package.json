@@ -18,13 +18,21 @@
   ],
   "scripts": {
     "build": "tsup",
+    "test": "vitest run",
     "prepublishOnly": "npm run build"
   },
   "keywords": ["slug", "url", "seo", "string"],
   "author": "",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MaxGrushevsky/slug.git"
+  },
+  "bugs": "https://github.com/MaxGrushevsky/slug/issues",
+  "homepage": "https://github.com/MaxGrushevsky/slug#readme",
   "devDependencies": {
     "tsup": "^8.3.5",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
   }
 }
