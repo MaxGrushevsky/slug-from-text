@@ -1,29 +1,47 @@
 # slug-from-text
 
-Generate small, dependency-free, URL‑friendly slugs from text.
+> Generate URL-friendly slugs from any text. Zero dependencies. TypeScript-first.
 
-Works in Node.js and modern bundlers (ESM and CommonJS) and ships TypeScript types out of the box.
+[![npm](https://img.shields.io/npm/v/slug-from-text)](https://www.npmjs.com/package/slug-from-text)
+[![license](https://img.shields.io/npm/l/slug-from-text)](./LICENSE)
+[![build](https://img.shields.io/github/actions/workflow/status/MaxGrushevsky/slug/ci.yml)](https://github.com/MaxGrushevsky/slug/actions)
+
+## Features
+
+- Converts any text to a clean, URL-safe slug
+- Normalizes **accented Latin letters** to ASCII (`é` → `e`, `ß` → `ss`, `æ` → `ae`, etc.)
+- Configurable **separator** (`-`, `_`, or none), **max length**, **locale-aware lowercase**
+- Written in **TypeScript** — ships with full type declarations
+- **Zero runtime dependencies**
+- Works in Node.js, Deno, Bun, and modern browsers
+- ESM + CommonJS dual build
 
 ## Install
 
 ```bash
 npm install slug-from-text
+# or
+pnpm add slug-from-text
+# or
+yarn add slug-from-text
 ```
 
-## Quick start
+## Usage
 
 ```ts
 import { slug } from 'slug-from-text'
 
-slug('Hello World!')                       // 'hello-world'
-slug('Hello World!', { separator: '_' })   // 'hello_world'
-slug('Hello World!', { lowercase: false }) // 'Hello-World'
-slug('Café & Bar', { removeSpecialChars: true }) // 'cafe-bar'
-slug('Very long title here', { maxLength: 12 })  // 'very-long-ti'
-slug('TITLE', { locale: 'tr' })            // locale-aware lowercase
+slug('Hello World!')                              // 'hello-world'
+slug('Café & Bar')                                // 'cafe-bar'
+slug('Über groß')                                 // 'uber-gross'
+slug('Hello World!', { separator: '_' })          // 'hello_world'
+slug('Hello World!', { separator: '' })           // 'helloworld'
+slug('Hello World!', { lowercase: false })        // 'Hello-World'
+slug('Very long title here', { maxLength: 10 })   // 'very-long'
+slug('Istanbul', { locale: 'tr' })                // locale-aware lowercase
 ```
 
-### CommonJS usage
+CommonJS (require) is also supported:
 
 ```js
 const { slug } = require('slug-from-text')
@@ -35,46 +53,58 @@ slug('Hello World!') // 'hello-world'
 
 ### `slug(text: string, options?: SlugOptions): string`
 
-- **text** — input string
-- **options** — optional configuration:
-  - `separator` — `'-'` | `'_'` | `''` (default: `'-'`).
-    - Replaces whitespace and the other two separators with this character (or removes them if `''`).
-  - `lowercase` — `boolean` (default: `true`).
-    - When `true`, converts the string to lowercase before further processing.
-  - `removeSpecialChars` — `boolean` (default: `true`).
-    - When `true`, removes non‑word characters (punctuation, symbols, etc.).
-  - `maxLength` — `number` (optional).
-    - If provided and greater than 0, the resulting slug is cut to this length and trailing separators are trimmed.
-  - `locale` — `string | false` (optional).
-    - When set (for example, `'tr'`), uses `toLocaleLowerCase(locale)` for lowercasing instead of `toLowerCase()`.
-    - When `false` or `undefined`, default lowercasing is used.
+Converts text to a URL-friendly slug.
+
+Returns `''` for empty strings, whitespace-only strings, and non-string values.
+
+#### Options
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `separator` | `'-' \| '_' \| ''` | `'-'` | Character used to replace spaces and other separators |
+| `lowercase` | `boolean` | `true` | Convert to lowercase before processing |
+| `removeSpecialChars` | `boolean` | `true` | Remove non-word characters (punctuation, symbols) |
+| `maxLength` | `number` | — | Trim result to this length; trailing separators are removed |
+| `locale` | `string \| false` | — | Locale for `toLocaleLowerCase()` (e.g. `'tr'` for Turkish) |
 
 ### TypeScript types
 
-This package ships TypeScript declarations and exports the following types:
-
-- `SlugOptions` — options object type for the `slug` function.
-- `SlugSeparator` — allowed separators: `'-' | '_' | ''`.
-
-You can import them if needed:
+The package exports the following types:
 
 ```ts
 import { slug, type SlugOptions, type SlugSeparator } from 'slug-from-text'
 ```
 
+- `SlugOptions` — options object for the `slug` function
+- `SlugSeparator` — union type `'-' | '_' | ''`
+
 ## Normalization details
 
-- **Accented Latin letters and special symbols**
-  - Latin letters with diacritics and some special symbols (for example, `é`, `ö`, `ñ`, `ß`, `æ`, `œ`, `İ`, `ı`) are normalized to their closest ASCII equivalents (`e`, `o`, `n`, `ss`, `ae`, `oe`, `i`, `i`).
-  - The normalization happens before special characters are removed and separators are applied.
+**Accented Latin characters** are normalized via Unicode NFD decomposition + diacritic strip, with additional manual mappings:
 
-- **Whitespace and separators**
-  - All consecutive whitespace characters are collapsed and turned into the chosen `separator` (or removed when `separator` is `''`).
-  - Leading and trailing separators are always trimmed.
+| Input | Output | | Input | Output |
+|---|---|---|---|---|
+| `é ö ñ` | `e o n` | | `ß` | `ss` |
+| `æ` / `Æ` | `ae` / `AE` | | `œ` / `Œ` | `oe` / `OE` |
+| `ı` | `i` | | `İ` | `I` |
 
-- **Empty and non‑string values**
-  - If `text` is empty, consists only of whitespace, or is not a string, `slug` returns an empty string.
+**Separators and whitespace:**
+- Consecutive whitespace is collapsed and replaced by `separator`
+- Leading and trailing separators are always trimmed
+
+## Development
+
+```bash
+git clone https://github.com/MaxGrushevsky/slug.git
+cd slug
+npm install
+
+npm run build         # compile to dist/
+npm test              # run tests once
+npm run test:watch    # run tests in watch mode
+npm run typecheck     # TypeScript type-check only
+```
 
 ## License
 
-MIT
+[MIT](./LICENSE)

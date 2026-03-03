@@ -1,15 +1,19 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
+    "target": "ES6",
     "module": "ESNext",
     "moduleResolution": "bundler",
+    "lib": ["ESNext"],
+    "rootDir": "src",
+    "outDir": "dist",
     "declaration": true,
     "declarationMap": true,
+    "sourceMap": true,
     "strict": true,
+    "esModuleInterop": true,
     "skipLibCheck": true,
-    "outDir": "dist",
-    "rootDir": "."
+    "forceConsistentCasingInFileNames": true
   },
-  "include": ["index.ts"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src"],
+  "exclude": ["node_modules", "dist", "src/**/*.test.ts"]
 }

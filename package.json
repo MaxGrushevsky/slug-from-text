@@ -1,27 +1,7 @@
 {
   "name": "slug-from-text",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Generate URL-friendly slugs from text. Zero dependencies.",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
-    }
-  },
-  "sideEffects": false,
-  "files": [
-    "dist",
-    "README.md"
-  ],
-  "scripts": {
-    "build": "tsup",
-    "test": "vitest run",
-    "prepublishOnly": "npm run build"
-  },
   "keywords": ["slug", "url", "seo", "string"],
   "author": "MaxGrushevsky",
   "license": "MIT",
@@ -29,11 +9,43 @@
     "type": "git",
     "url": "https://github.com/MaxGrushevsky/slug.git"
   },
-  "bugs": "https://github.com/MaxGrushevsky/slug/issues",
   "homepage": "https://github.com/MaxGrushevsky/slug#readme",
+  "bugs": {
+    "url": "https://github.com/MaxGrushevsky/slug/issues"
+  },
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build && npm test"
+  },
   "devDependencies": {
-    "tsup": "^8.3.5",
-    "typescript": "^5.7.2",
-    "vitest": "^2.1.8"
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^2.0.0"
   }
 }
