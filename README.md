@@ -4,7 +4,6 @@
 
 [![npm](https://img.shields.io/npm/v/slug-from-text)](https://www.npmjs.com/package/slug-from-text)
 [![license](https://img.shields.io/npm/l/slug-from-text)](./LICENSE)
-[![build](https://img.shields.io/github/actions/workflow/status/MaxGrushevsky/slug/ci.yml)](https://github.com/MaxGrushevsky/slug/actions)
 
 ## Features
 
