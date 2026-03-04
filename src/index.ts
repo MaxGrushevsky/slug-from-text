@@ -17,6 +17,14 @@ export interface SlugOptions {
   locale?: string | false
 }
 
+const COMBINING_MARKS_REGEX = /[\u0300-\u036f]/g
+const SPECIAL_CHARS_REGEX = /[^\w\s-]/g
+const SPACE_UNDERSCORE_REGEX = /[\s_]+/g
+const SPACE_DASH_REGEX = /[\s-]+/g
+const SPACE_DASH_UNDERSCORE_REGEX = /[\s_-]+/g
+const TRIM_DASHES_REGEX = /^-+|-+$/g
+const TRIM_UNDERSCORES_REGEX = /^_+|_+$/g
+
 const defaultOptions: Required<Omit<SlugOptions, 'maxLength' | 'locale'>> & {
   maxLength?: number
   locale?: string | false
@@ -29,7 +37,7 @@ const defaultOptions: Required<Omit<SlugOptions, 'maxLength' | 'locale'>> & {
 function normalizeToAscii(input: string): string {
   if (!input) return ''
 
-  let result = input.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+  let result = input.normalize('NFD').replace(COMBINING_MARKS_REGEX, '')
 
   result = result
     .replace(/ß/g, 'ss')
@@ -67,25 +75,33 @@ export function slug(text: string, options: SlugOptions = {}): string {
   result = normalizeToAscii(result)
 
   if (opts.removeSpecialChars) {
-    result = result.replace(/[^\w\s-]/g, '')
+    result = result.replace(SPECIAL_CHARS_REGEX, '')
   }
 
   if (opts.separator === '-') {
-    result = result.replace(/[\s_]+/g, '-')
+    result = result.replace(SPACE_UNDERSCORE_REGEX, '-')
   } else if (opts.separator === '_') {
-    result = result.replace(/[\s-]+/g, '_')
+    result = result.replace(SPACE_DASH_REGEX, '_')
   } else {
-    result = result.replace(/[\s_-]+/g, '')
+    result = result.replace(SPACE_DASH_UNDERSCORE_REGEX, '')
   }
 
   if (opts.separator) {
-    result = result.replace(new RegExp(`^${opts.separator}+|${opts.separator}+$`, 'g'), '')
+    if (opts.separator === '-') {
+      result = result.replace(TRIM_DASHES_REGEX, '')
+    } else if (opts.separator === '_') {
+      result = result.replace(TRIM_UNDERSCORES_REGEX, '')
+    }
   }
 
   if (opts.maxLength != null && opts.maxLength > 0 && result.length > opts.maxLength) {
     result = result.slice(0, opts.maxLength)
     if (opts.separator) {
-      result = result.replace(new RegExp(`${opts.separator}+$`, 'g'), '')
+      if (opts.separator === '-') {
+        result = result.replace(TRIM_DASHES_REGEX, '')
+      } else if (opts.separator === '_') {
+        result = result.replace(TRIM_UNDERSCORES_REGEX, '')
+      }
     }
   }
 

@@ -1,17 +1,17 @@
 {
   "name": "slug-from-text",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Generate URL-friendly slugs from text. Zero dependencies.",
   "keywords": ["slug", "url", "seo", "string"],
   "author": "MaxGrushevsky",
   "license": "MIT",
   "repository": {
-    "type": "git",
-    "url": "https://github.com/MaxGrushevsky/slug.git"
+  "type": "git",
+  "url": "https://github.com/MaxGrushevsky/slug-from-text.git"
   },
-  "homepage": "https://github.com/MaxGrushevsky/slug#readme",
+  "homepage": "https://github.com/MaxGrushevsky/slug-from-text#readme",
   "bugs": {
-    "url": "https://github.com/MaxGrushevsky/slug/issues"
+  "url": "https://github.com/MaxGrushevsky/slug-from-text/issues"
   },
   "type": "module",
   "main": "./dist/index.cjs",
